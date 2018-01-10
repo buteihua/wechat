@@ -143,29 +143,27 @@ public function recharge(Request $request, $user_id) {
             }
             DB::beginTransaction();
             try{
-            $trading = DspAccount::where('out_trade_no', $content['out_trade_no'])->first();
-            $user = DspUser::find($trading->user_id);
-            $trading->status = 1;
-            $trading->total_amount = $content['total_fee'];
-            $trading->account_balance = $user->account + $content['total_fee'];
-            $trading->trade_no = $content['transaction_id'];
-            $trading->success_at = date('Y-m-d H:i:s', strtotime($content['time_end']));
-            $trading->save();
+                $trading = DspAccount::where('out_trade_no', $content['out_trade_no'])->first();
+                $user = DspUser::find($trading->user_id);
+                $trading->status = 1;
+                $trading->total_amount = $content['total_fee'];
+                $trading->account_balance = $user->account + $content['total_fee'];
+                $trading->trade_no = $content['transaction_id'];
+                $trading->success_at = date('Y-m-d H:i:s', strtotime($content['time_end']));
+                $trading->save();
 
-            $user->account = $user->account + $content['total_fee'];
-            $res = $user->save();
+                $user->account = $user->account + $content['total_fee'];
+                $res = $user->save();
 
-            DB::commit();
-            return $res;
+                DB::commit();
+                return $res;
             }catch (\Exception $e) {
                 Log::info('充值失败'.$e);
-            DB::rollback();
-            return false;
+                DB::rollback();
+                return false;
         }
     }
 ```
-## Security Vulnerabilities
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
 
