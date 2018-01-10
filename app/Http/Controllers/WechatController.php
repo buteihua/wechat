@@ -38,11 +38,16 @@ class WechatController extends Controller {
 
     //扫码支付页面
     public function native() {
-        $data['mode'] = 1;
+        $data['mode'] = 2;
         $wxpay = new Wxpay;
         $data['url'] = $wxpay->native($data['mode']);
         $data['type'] = $this->types[3];
         return view('native', $data);
+    }
+
+    //扫码支付
+    public function postNative(Request $request) {
+
     }
 
     //订单查询页面
